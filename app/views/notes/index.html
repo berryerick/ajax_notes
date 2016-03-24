@@ -1,0 +1,46 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Notes</title>
+    <link rel="stylesheet" href="/static/css/styles.css" type="text/css">
+    <script   src="https://code.jquery.com/jquery-2.2.2.min.js"   integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI="   crossorigin="anonymous"></script>
+    <script type="text/javascript">
+    	$(document).ready(function(){
+    		$('form#new_note').on('submit',function(res){
+    			$.post('/notes/create', $(this).serialize(), function(res){
+    				$('div#notes').html(res);
+    			})
+    			return false
+    		})
+    		$('form.note').on('focusout', function(){
+    			$(this).on('submit',function(){
+    				$.post("/update", $(this).serialize(), function(res){
+    					$(this).html(res)
+    				})
+    				return false
+    			});
+    			$(this).submit()
+
+    		})
+    	})
+
+    </script>
+</head>
+	
+<body>
+	<div id="notes">
+		{% for note in notes %}
+			<form class="note" method="post">
+				<h1>{{note['title']}}</h1>
+				<textarea name="description">{{note['description']}}</textarea>
+				<input type="hidden" value="{{note['id']}}" name="id"></input>
+				<a href="/delete/{{note['id']}}">Delete this note</a>
+			</form>
+		{% endfor %}
+	</div>	
+	<form action="/notes/create" id="new_note" method="post">
+		<input type="text" name="title"></input>
+		<input type="submit" value="new note"></input>
+	</form>	
+</body>
+</html>

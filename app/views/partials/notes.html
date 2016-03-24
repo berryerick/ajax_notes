@@ -1,0 +1,8 @@
+{% for note in notes %}
+	<form action="/update/{{note['id']}}" class="note" method="post">
+		<h1>{{note['title']}}</h1>
+		<textarea name="description">{{note['description']}}</textarea>
+		<!-- <input type="hidden" value="{{note['id']}}" name="id"></input> -->
+		<a href="/delete/{{note['id']}}">Delete this note</a>
+	</form>
+{% endfor %}
